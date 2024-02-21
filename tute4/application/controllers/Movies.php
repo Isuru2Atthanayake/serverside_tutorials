@@ -37,10 +37,24 @@ class Movies extends CI_Controller {
     
     public function search() {
         // Your search logic here
+        $genre = $this->input->get('genre');
+        $this->load->model('Moviemodel');
+        $movies = $this->Moviemodel->get_movies_by_genre($genre);
+        
+        if ($movies) {
+            $data['movies'] = $movies;
+            $this->load->view('movies_search_results', $data);
+        } else {
+            $data['error'] = 'No movies found for the specified genre.';
+            $this->load->view('movies_error', $data);
+        }
     }
     
-    public function allmovies() {
+    public function allmovies() {// this function is called when the user clicks on the "All Movies" link
         // Your logic to display all movies
+        $this->load->model('Moviemodel');
+        $data['movies'] = $this->Moviemodel->get_all_movies();
+        $this->load->view('all_movies_view', $data);
     }
 }
 ?>
